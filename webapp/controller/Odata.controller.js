@@ -125,11 +125,11 @@ sap.ui.define([
                     JoiningDate: sJoiningDate
                 };
                 var oData = that.getOwnerComponent().getModel();
-                var updatePath = "/EmployeeInfo(" + sfirstName + ")";
+                var updatePath = "/EmployeeInfo(' "+sfirstName+" ')"; 
                 oData.update(updatePath, oUpdatedEmployee,{
-                success: function (response) {
-                MessageToast.show("Record updated successfully");
-                },
+                    success: function(){
+                        sap.m.MessageToast.show("Record updated successfully!");
+                    },
                 error: function (error) {
                 console.log(error)
                 MessageToast.show("Cannot update record");
