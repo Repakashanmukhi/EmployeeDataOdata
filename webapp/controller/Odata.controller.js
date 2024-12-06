@@ -94,6 +94,7 @@ sap.ui.define([
                 that.update=sap.ui.xmlfragment("empinfo.fragment.update", that)
             }
             var oContext = oEvent.getSource().getBindingContext().getObject();
+            sap.ui.getCore().byId("id_E").setValue(oContext.ID);
             sap.ui.getCore().byId("FN_E").setValue(oContext.FirstName);
             sap.ui.getCore().byId("LN_E").setValue(oContext.LastName);
             sap.ui.getCore().byId("E_E").setValue(oContext.Email);
@@ -105,6 +106,7 @@ sap.ui.define([
         },
         onUpdateDialog: function() {
             // Get the updated values from the dialog fields
+            var sId = sap.ui.getCore().byId("id_E").getValue();
             var sfirstName = sap.ui.getCore().byId("FN_E").getValue();
             var slastName = sap.ui.getCore().byId("LN_E").getValue();
             var sEmail = sap.ui.getCore().byId("E_E").getValue();
@@ -114,8 +116,9 @@ sap.ui.define([
             var sJoiningDate = sap.ui.getCore().byId("JD_E").getValue();
         
             // Validate that all fields are filled
-            if (sfirstName && slastName && sEmail && sPhone && sDepartment && sPosition && sJoiningDate) {
+            if (sId && sfirstName && slastName && sEmail && sPhone && sDepartment && sPosition && sJoiningDate) {
                 var oUpdatedEmployee = {
+                    ID:sId,
                     FirstName: sfirstName,
                     LastName: slastName,
                     Email: sEmail,
@@ -125,12 +128,13 @@ sap.ui.define([
                     JoiningDate: sJoiningDate
                 };
                 var oData = that.getOwnerComponent().getModel();
-                var updatePath = "/EmployeeInfo(' "+sfirstName+" ')"; 
+                // var updatePath = "/EmployeeInfo,oData (' "+sfirstName+" ')"; 
+                var updatePath = `/EmployeeInfo('${sId}')`
                 oData.update(updatePath, oUpdatedEmployee,{
                     success: function(){
                         sap.m.MessageToast.show("Record updated successfully!");
                     },
-                error: function (error) {
+                error: function (error) { 
                 console.log(error)
                 MessageToast.show("Cannot update record");
             }
