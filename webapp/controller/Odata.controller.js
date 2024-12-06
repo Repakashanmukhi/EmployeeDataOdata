@@ -103,7 +103,7 @@ sap.ui.define([
             sap.ui.getCore().byId("JD_E").setValue(oContext.JoiningDate);
             that.update.open();
         },
-        onUpdateDialog: function(oEvent) {
+        onUpdateDialog: function() {
             // Get the updated values from the dialog fields
             var sfirstName = sap.ui.getCore().byId("FN_E").getValue();
             var slastName = sap.ui.getCore().byId("LN_E").getValue();
@@ -125,35 +125,20 @@ sap.ui.define([
                     JoiningDate: sJoiningDate
                 };
                 var oData = that.getOwnerComponent().getModel();
-
-                // Updating the new employee record
-                oData.update("/EmployeeInfo", oUpdatedEmployee, {
-                    success: function (response) {
-                        console.log(response)
-                        // Show success message
-                        MessageToast.show("Record updated successfully");
-                        // Close the dialog
-                        that.create.close();
-
-                        // Refresh the table data (ensure the model is refreshed)
-                        // oData.refresh(true);
-                    },
-                    error: function (error) {
-                        // Handle error if the updation fails
-                        MessageToast.show("Error updating record");
-                        console.log(error);
-                    }
-                });
-            } else {
-                MessageBox.error("Please fill all required fields.");
+                var updatePath = "/EmployeeInfo(" + sfirstName + ")";
+                oData.update(updatePath, oUpdatedEmployee,{
+                success: function (response) {
+                MessageToast.show("Record updated successfully");
+                },
+                error: function (error) {
+                console.log(error)
+                MessageToast.show("Cannot update record");
             }
-        },
-        // Close the dialog function if needed
-        onCancleDialog: function () {
-            that.create.close();
-        },
-    })           
+           })
+        }
+    }
+  })
 });
-  
+
 
 
