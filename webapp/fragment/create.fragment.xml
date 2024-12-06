@@ -3,8 +3,6 @@ xmlns="sap.m">
 <Dialog id="create">
             <FlexBox >
                <VBox >
-                    <Label text="ID" />
-                    <Input id="eid" width="250px" editable="true"/>
                     <Label text="First Name" />
                     <Input id="efirstName" width="250px" editable="true"/>
                     <Label text="Last Name" />
