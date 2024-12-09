@@ -105,7 +105,6 @@ sap.ui.define([
             that.update.open();
         },
         onUpdateDialog: function() {
-            // Get the updated values from the dialog fields
             var sId = sap.ui.getCore().byId("id_E").getValue();
             var sfirstName = sap.ui.getCore().byId("FN_E").getValue();
             var slastName = sap.ui.getCore().byId("LN_E").getValue();
@@ -113,10 +112,7 @@ sap.ui.define([
             var sPhone = sap.ui.getCore().byId("P_E").getValue();
             var sDepartment = sap.ui.getCore().byId("D_E").getValue();
             var sPosition = sap.ui.getCore().byId("PO_E").getValue();
-            var sJoiningDate = sap.ui.getCore().byId("JD_E").getValue();
-        
-            // Validate that all fields are filled
-            if (sId && sfirstName && slastName && sEmail && sPhone && sDepartment && sPosition && sJoiningDate) {
+         
                 var oUpdatedEmployee = {
                     ID:sId,
                     FirstName: sfirstName,
@@ -124,23 +120,24 @@ sap.ui.define([
                     Email: sEmail,
                     Phone: sPhone,
                     Department: sDepartment,
-                    Position: sPosition,
-                    JoiningDate: sJoiningDate
+                    Position: sPosition
+                 
                 };
                 var oData = that.getOwnerComponent().getModel();
-                // var updatePath = "/EmployeeInfo,oData (' "+sfirstName+" ')"; 
-                var updatePath = `/EmployeeInfo('${sId}')`
+                var updatePath = `/EmployeeInfo(guid'${sId}')`
                 oData.update(updatePath, oUpdatedEmployee,{
                     success: function(){
                         sap.m.MessageToast.show("Record updated successfully!");
                     },
-                error: function (error) { 
+                error: function (error) {
                 console.log(error)
                 MessageToast.show("Cannot update record");
-            }
+                },
+                onCancleDialog: function(){
+                    that.update.close();
+                }
            })
-        }
-    }
+        },  
   })
 });
 
