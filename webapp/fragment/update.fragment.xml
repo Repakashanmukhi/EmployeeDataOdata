@@ -24,8 +24,9 @@ xmlns="sap.m">
         <Bar>
             <contentRight>
             <Button text="Update" press="onUpdateDialog"></Button>
-            <Button text="Cancle" press="onCancleDialog"></Button>
+            <Button text="Close" press="onCancleDialog"></Button>
            </contentRight>
          </Bar>
 </Dialog>
 </core:FragmentDefinition>
+

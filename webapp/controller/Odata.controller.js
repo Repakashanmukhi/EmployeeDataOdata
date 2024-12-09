@@ -12,12 +12,22 @@ sap.ui.define([
             that.getView().setModel(oModel);
             if (!that.create) {
                 that.create = sap.ui.xmlfragment("empinfo.fragment.create", that);
-                that.getView().addDependent(that.create); // Ensure the fragment is added as a dependent
-            } 
+                that.getView().addDependent(that.create);
+            }
         },
+        // Opens the fragment 
         onOpenDialog: function () {
             that.create.open();
         },
+        // Calendar select handler
+        handleCalendarSelect: function (oEvent) {
+            var oCalendar = oEvent.getSource();
+            var oSelectedDate = oCalendar.getSelectedDates()[0].getStartDate(); // Get selected date
+            var oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({ pattern: "yyyy-MM-dd" });
+            var sFormattedDate = oDateFormat.format(oSelectedDate);
+            sap.ui.getCore().byId("ejoiningDate").setValue(sFormattedDate); // Set the value in the input
+        },
+        //Enter the employee information
         onSubmitDialog: function () {
             var sfirstName = sap.ui.getCore().byId("efirstName").getValue();
             var slastName = sap.ui.getCore().byId("elastName").getValue();
@@ -26,7 +36,6 @@ sap.ui.define([
             var sdepartment = sap.ui.getCore().byId("edepartment").getValue();
             var sposition = sap.ui.getCore().byId("eposition").getValue();
             var sjoiningDate = sap.ui.getCore().byId("ejoiningDate").getValue();
-
             if (sfirstName && slastName && sEmail && sPhone && sdepartment && sposition && sjoiningDate) {
                 var oNewEmployee = {
                     FirstName: sfirstName,
@@ -37,57 +46,30 @@ sap.ui.define([
                     Position: sposition,
                     JoiningDate: sjoiningDate
                 };
-
                 var oData = that.getOwnerComponent().getModel();
-
-                // Creating the new employee record
                 oData.create("/EmployeeInfo", oNewEmployee, {
                     success: function (response) {
-                        console.log(response)
-                        // Show success message
                         MessageToast.show("Record created successfully");
-                        // Close the dialog
                         that.create.close();
-
-                        // Refresh the table data (ensure the model is refreshed)
                         oData.refresh(true);
                     },
                     error: function (error) {
-                        // Handle error if the creation fails
                         MessageToast.show("Error creating record");
-                        console.log(error);
                     }
                 });
             } else {
                 MessageBox.error("Please fill all required fields.");
             }
-        },
-        // Close the dialog function if needed
+        }, 
         onclose: function () {
             that.create.close();
         },
-        // onClear: function(){
-        //     sap.ui.getCore().byId("eFirstName").setValue("");
-        //     sap.ui.getCore().byId("eLatName").setValue("");
-        //     sap.ui.getCore().byId("eEmail").setValue("");
-        //     sap.ui.getCore().byId("ePhone").setValue("");
-        //     sap.ui.getCore().byId("edepartment").setValue("");
-        //     sap.ui.getCore().byId("eposition").setValue("");
-        //     sap.ui.getCore().byId("ejoiningDate").setValue("");
-        // } 
-        DeleteBtn: function(oEvent){
-            var oButton=oEvent.getSource();
-            var oContext=oButton.getBindingContext();
-            var sPath=oContext.getPath();
-            var oModel=this.getView().getModel();
-            oModel.remove(sPath,{
-                success: function(){
-                    sap.m.MessageToast.show("Record deleted successfully!");
-                },
-                error: function(){
-                    sap.m.MessageToast.show("Cannot delete record");
-                }
-            })
+        handleCalendarSelectUpdate: function (oEvent) {
+            var oCalendar = oEvent.getSource();
+            var oSelectedDate = oCalendar.getSelectedDates()[0].getStartDate();
+            var oDateFormat = sap.ui.core.format.DateFormat.getDateInstance({ pattern: "yyyy-MM-dd" });
+            var sFormattedDate = oDateFormat.format(oSelectedDate);
+            sap.ui.getCore().byId("JD_E").setValue(sFormattedDate); 
         },
         UpdateBtn: function(oEvent){
             if(!that.update){
@@ -104,7 +86,8 @@ sap.ui.define([
             sap.ui.getCore().byId("JD_E").setValue(oContext.JoiningDate);
             that.update.open();
         },
-        onUpdateDialog: function() {
+         //Get the values from table and display them on a update fragment 
+        onUpdateDialog: function(){
             var sId = sap.ui.getCore().byId("id_E").getValue();
             var sfirstName = sap.ui.getCore().byId("FN_E").getValue();
             var slastName = sap.ui.getCore().byId("LN_E").getValue();
@@ -112,7 +95,7 @@ sap.ui.define([
             var sPhone = sap.ui.getCore().byId("P_E").getValue();
             var sDepartment = sap.ui.getCore().byId("D_E").getValue();
             var sPosition = sap.ui.getCore().byId("PO_E").getValue();
-         
+            // Validate that all fields are filled
                 var oUpdatedEmployee = {
                     ID:sId,
                     FirstName: sfirstName,
@@ -124,6 +107,7 @@ sap.ui.define([
                  
                 };
                 var oData = that.getOwnerComponent().getModel();
+                // var updatePath = "/EmployeeInfo,oData (' "+sfirstName+" ')";
                 var updatePath = `/EmployeeInfo(guid'${sId}')`
                 oData.update(updatePath, oUpdatedEmployee,{
                     success: function(){
@@ -132,14 +116,9 @@ sap.ui.define([
                 error: function (error) {
                 console.log(error)
                 MessageToast.show("Cannot update record");
-                },
-                onCancleDialog: function(){
-                    that.update.close();
-                }
+            }
            })
-        },  
-  })
+        }
+        
+    });
 });
-
-
-
