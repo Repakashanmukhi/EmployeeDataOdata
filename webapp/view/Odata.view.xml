@@ -73,10 +73,10 @@
             <u:Calendar
                 id="calendar"
                 select="handleCalendarSelect" /> <!-- Event handler for calendar select -->
-            <Button press="handleSelectToday" text="Select Today" />
+            <!-- <Button press="handleSelectToday" text="Select Today" /> -->
             <l:HorizontalLayout>
-                <Label text="Selected Date (yyyy-mm-dd):" class="labelMarginLeft" />
-                <Text id="selectedDate" text="No Date Selected" class="labelMarginLeft"/>
+                <!-- <Label text="Selected Date (yyyy-mm-dd):" class="labelMarginLeft" />
+                <Text id="selectedDate" text="No Date Selected" class="labelMarginLeft"/> -->
             </l:HorizontalLayout>
         </l:VerticalLayout>
 

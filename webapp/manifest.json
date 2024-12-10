@@ -60,7 +60,7 @@
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
-                    "bundleName": "empinfo.i18n.i18n"
+                "bundleName": "empinfo.i18n.i18n"
                 }
             },
             "": {
